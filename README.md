@@ -8,7 +8,7 @@ It is self hosted bot, you are the owner of the bot, all private chats will be s
 
 ## Installing TSB
 ### Google Colab
-<a href="https://colab.research.google.com/github/BiltuDas1/telegram-shell-bot/blob/master/Bot.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>  
+<a href="https://colab.research.google.com/github/BiltuDas1/telegram-shell-bot/blob/main/Bot.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>  
 Use Ctrl+Click or CMD+Click to open in a New window  
 
 ### PythonAnywhere
