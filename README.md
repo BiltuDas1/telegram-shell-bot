@@ -29,3 +29,11 @@ rm -d telegram-shell-bot
 bash run.sh
 ```
 All Done, Use /online command.
+
+## Restriction of Free Version of Server
+### Google Colab
+1. You need to visit that Google Colab script webpage into every 90 minutes so that your colab notebook will not be into idle mode (Note: It will not work more than 12 hours, after 12 hours you need to start that colab notebook manually, make sure to backup config.ini)
+
+### PythonAnywhere
+1. Free Version Server has 100 Seconds Tarpit. If 100 seconds completed then bot will be work little bit slow, and sometime terminate. (Don't worry that script will be enable it automatically. make sure to use /online command for checking bot is working or not)
+2. This method is not recommended for large Groups.
