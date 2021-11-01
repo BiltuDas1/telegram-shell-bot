@@ -12,3 +12,19 @@ It is self hosted bot, you are the owner of the bot, all private chats will be s
 Use Ctrl+Click or CMD+Click to open in a New window  
 
 ### PythonAnywhere
+1. At first [Log In](https://www.pythonanywhere.com/login/) or [Create Account](https://www.pythonanywhere.com/registration/register/beginner/) and Open PythonAnywhere Dashboard.
+2. Under New Colsole Click on Bash (It will create New Bash Console)
+3. Into Console Type
+```
+git clone https://github.com/BiltuDas1/telegram-shell-bot.git
+cd telegram-shell-bot
+mv * ..
+cd ..
+rm -d telegram-shell-bot
+```
+4. Now click on the Menu bar and then choose Files, from that list choose config.ini, into there config Target Group, Forward Id, Bot Token etc. If you have any issue then you can ask it into [Telegram](https://telegram.me/techsouls0)
+5. Now press browser back button to come on console and Start the Bot using
+```
+bash run.sh
+```
+All Done, Use /online command.
