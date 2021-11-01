@@ -22,7 +22,7 @@ if [ "$rescode" == "1" ]; then
   if [ "$positives" -le "3" ]; then
     curl --Silent "$fetch/sendMessage?chat_id=$id&text=The URL is safe.☑️" --Output "temp/bot.log"
     msg_id=$(jq '.result.message_id' "temp/bot.log")
-    sleep 3
+    sleep 5
     curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
   else
     if [ "$positives" -le "5" ]; then
@@ -30,13 +30,13 @@ if [ "$rescode" == "1" ]; then
       curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$urlmsgid"
       curl --Silent "$fetch/sendMessage?chat_id=$id&text=This Message needs additional Review.📝" --Output "temp/bot.log"
       msg_id=$(jq '.result.message_id' "temp/bot.log")
-      sleep 3
+      sleep 10
       curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
     else
       curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$urlmsgid"
       curl --Silent "$fetch/sendMessage?chat_id=$id&text=The URL is Dangerous.⚠️" --Output "temp/bot.log"
       msg_id=$(jq '.result.message_id' "temp/bot.log")
-      sleep 3
+      sleep 5
       curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
     fi
   fi
@@ -62,7 +62,7 @@ else
       curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$urlmsgid"
       curl --Silent "$fetch/sendMessage?chat_id=$id&text=This Message needs additional Review.📝" --Output "temp/bot.log"
       msg_id=$(jq '.result.message_id' "temp/bot.log")
-      sleep 5
+      sleep 10
       curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
     else
       curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$urlmsgid"
