@@ -5,6 +5,7 @@ It is self hosted bot, you are the owner of the bot, all private chats will be s
 1. Call [@Botfather](https://telegram.me/BotFather)
 2. Type `/start` and after that type `/newbot` to create a new bot
 3. Now Type a Name and Username for that bot.
+4. Now All done Make sure to Copy that API token
 
 ## Installing TSB
 ### Google Colab
