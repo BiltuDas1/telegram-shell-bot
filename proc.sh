@@ -124,7 +124,7 @@ do
     # Extracting Message Id
     msg_id=$(jq '.result[].message.message_id' "${WORKINGDIR}/temp/log.txt" | tail -1)
     head=0
-    until [ "1" == "1" ]
+    while true
     do
       head=$(($head + 1))
       urlold=$url
