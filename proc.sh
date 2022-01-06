@@ -9,7 +9,7 @@ rm "temp/log.txt"
 spaceloc=$(expr index "$hash0" " ")
 hash0=${hash0:0:$spaceloc}
 # ------------ Start Shell
-while [ "1" -eq "1" ]
+while true
 do
   curl --Silent "$fetch/getUpdates" --Output "temp/log.txt"
   # Reload after 90-100 Messages
@@ -124,7 +124,7 @@ do
     # Extracting Message Id
     msg_id=$(jq '.result[].message.message_id' "temp/log.txt" | tail -1)
     head=0
-    until [ "1" == "1"]
+    until [ "1" == "1" ]
     do
       head=$(($head + 1))
       urlold=$url

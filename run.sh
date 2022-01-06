@@ -3,8 +3,7 @@ mkdir temp log
 # Lading Configuration File
 source bot.conf
 fetch="https://api.telegram.org/bot${BOTTOKEN}"
-restart=1
-while [ "$restart" -eq "1" ]
+while true
 do
   # Collect Admin Information
   curl --Silent "$fetch/getChatAdministrators?chat_id=${TARGETGROUP}" --Output "temp/admin.log"
