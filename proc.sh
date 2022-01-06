@@ -1,13 +1,8 @@
 #!/bin/bash
 # Loding Configuration File
-confline=$(wc -l < 'config.ini')
-grep -A $confline "#2#" 'config.ini' | tail -n +2 > 'temp/config_mod.ini'
-# Loading Complete
-id=$(sed -n '/### Target Group/,/#$$#/p' 'temp/config_mod.ini' | sed '/#/d')
-token=$(sed -n '/### Bot Token/,/#$$#/p' 'temp/config_mod.ini' | sed '/#/d')
-allow=$(sed -n '/### Allowed Groups/,/#$$#/p' 'temp/config_mod.ini')
+source bot.conf
 # ----- Setting Up
-fetch="https://api.telegram.org/bot$token"
+fetch="https://api.telegram.org/bot${BOTTOKEN}"
 curl --Silent "$fetch/getUpdates" --Output "temp/log.txt"
 hash0=$(sha256sum "temp/log.txt")
 rm "temp/log.txt"
@@ -22,13 +17,13 @@ do
   if [ "$msgscou" -ge "90" ]; then
     # Getting Last Update id
     update_id=$(jq '.result[].update_id' "temp/log.txt" | tail -1)
-    curl --Silent "$fetch/sendMessage?chat_id=$id&text=Reloading Offset Databases🔄" --Output "temp/bot.log"
+    curl --Silent "$fetch/sendMessage?chat_id=${TARGETGROUP}&text=Reloading Offset Databases🔄" --Output "temp/bot.log"
     clearoffset=$(($update_id + 1))
     curl --Silent "$fetch/getUpdates?offset=$clearoffset"
     # Deleting Output After 3 Seconds
     msg_id=$(jq '.result.message_id' "temp/bot.log")
     sleep 3
-    curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+    curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
   fi
   # ---------------------------------------------------------
   hash1=$(sha256sum "temp/log.txt")
@@ -44,8 +39,8 @@ do
   leave=$(jq '.result[].message.new_chat_member.username' "temp/log.txt" | tail -1 | grep -c "TechSoulsBot")
   if [ "$leave" == "1" ]; then
     grp_id=$(jq '.result[].message.chat.id' "temp/log.txt" | tail -1)
-    tmp="${allow%%$id*}"
-    if [ "$allow" != "$tmp" ]; then
+    tmp="${ALLOW%%$TARGETGROUP*}"
+    if [ "$ALLOW" != "$tmp" ]; then
       break
     else
       curl --Silent "$fetch/sendMessage?chat_id=$grp_id&text=You don't have Permission to Add me in this Group, At first Take Permission from @BiltuDas1 to add me in this group."
@@ -58,12 +53,12 @@ do
     online="0"
     # Deleting Command Message
     msg_id=$(jq '.result[].message.message_id' "temp/log.txt" | tail -1)
-    curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
-    curl --Silent "$fetch/sendMessage?chat_id=$id&text=Bot Status: Online✅" --Output "temp/bot.log"
+    curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
+    curl --Silent "$fetch/sendMessage?chat_id=${TARGETGROUP}&text=Bot Status: Online✅" --Output "temp/bot.log"
     # Deleting Output After 5 Seconds
     msg_id=$(jq '.result.message_id' "temp/bot.log")
     sleep 5
-    curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+    curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
     continue
   fi
   ## Restart
@@ -72,7 +67,7 @@ do
     restart="0"
     # Deleting Command Message
     msg_id=$(jq '.result[].message.message_id' "temp/log.txt" | tail -1)
-    curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+    curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
     exit
   fi
   ## Remove Known Spammers while Joining
@@ -91,12 +86,12 @@ do
     firstname=$(jq ".result[].message.new_chat_members[$user].first_name" "temp/log.txt" | tail -1)
     firstname=${firstname:1:-1}
     if [ "$ban" == "true" ]; then
-      curl --Silent "$fetch/banChatMember?chat_id=$id&user_id=$user_id"
-      curl --Silent "$fetch/sendMessage?chat_id=$id&text=$firstname banned from this Group due to previously abusing with another group members." --Output "temp/bot.log"
+      curl --Silent "$fetch/banChatMember?chat_id=${TARGETGROUP}&user_id=$user_id"
+      curl --Silent "$fetch/sendMessage?chat_id=${TARGETGROUP}&text=$firstname banned from this Group due to previously abusing with another group members." --Output "temp/bot.log"
       # Deleting Output After 5 Seconds
       msg_id=$(jq '.result.message_id' "temp/bot.log")
       sleep 5
-      curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+      curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
     fi
   done
 
@@ -105,16 +100,16 @@ do
   if [ "$del" == "1" ]; then
     # Deleting Mention Message
     msg_id=$(jq '.result[].message.reply_to_message.message_id' "temp/log.txt" | tail -1)
-    curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+    curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
     # Deleting Command Message
     msg_id=$(jq '.result[].message.message_id' "temp/log.txt" | tail -1)
-    curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+    curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
     # Send User a message that Delete Complete
-    curl --Silent "$fetch/sendMessage?chat_id=$id&text=Delete Completed!" --Output "temp/bot.log"
+    curl --Silent "$fetch/sendMessage?chat_id=${TARGETGROUP}&text=Delete Completed!" --Output "temp/bot.log"
     # Deleting Delete Complete Message After 3 Seconds
     msg_id=$(jq '.result.message_id' "temp/bot.log")
     sleep 3
-    curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+    curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
     del=0
     continue
   fi
@@ -145,10 +140,10 @@ do
     done
   else
     if [ "$url" -eq "1" ]; then
-      curl --Silent "$fetch/sendMessage?chat_id=$id&text=Scan Failed! Reason: URL must contains http or https protocol." --Output "temp/bot.log"
+      curl --Silent "$fetch/sendMessage?chat_id=${TARGETGROUP}&text=Scan Failed! Reason: URL must contains http or https protocol." --Output "temp/bot.log"
       msg_id=$(jq '.result.message_id' "temp/bot.log")
       sleep 7
-      curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+      curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
     fi
   fi
   # Save Note
@@ -158,13 +153,13 @@ do
     note=${note//\/savenote/}
     note=${note//\"/}
     msg_id=$(jq '.result[].message.reply_to_message.message_id' "temp/log.txt" | tail -1)
-    curl --Silent "$fetch/copyMessage?chat_id=-1001581134878&from_chat_id=$id&message_id=$msg_id" --Output "temp/saveid.txt"
+    curl --Silent "$fetch/copyMessage?chat_id=-1001581134878&from_chat_id=${TARGETGROUP}&message_id=$msg_id" --Output "temp/saveid.txt"
     msg_id=$(jq '.result.message_id' "temp/saveid.txt")
     echo $msg_id $note >>"settings/note.txt"
-    curl --Silent "$fetch/sendMessage?chat_id=$id&text=Your Note has been Saved, It can be access using `::$note` command" --Output "temp/bot.log"
+    curl --Silent "$fetch/sendMessage?chat_id=${TARGETGROUP}&text=Your Note has been Saved, It can be access using `::$note` command" --Output "temp/bot.log"
     msg_id=$(jq '.result.message_id' "temp/bot.log")
     sleep 5
-    curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+    curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
   fi
   # Get Notes
   getnote=$(jq '.result[].message.text' "temp/log.txt" | tail -1 | grep -c "::")
@@ -181,7 +176,7 @@ do
       notefou=$(grep -r "\b$getnote\b" "settings/note.txt")
       tmp=($notefou)
       notefou=${tmp[0]}
-      curl --Silent "$fetch/copyMessage?chat_id=$id&from_chat_id=-1001581134878&message_id=$notefou"
+      curl --Silent "$fetch/copyMessage?chat_id=${TARGETGROUP}&from_chat_id=-1001581134878&message_id=$notefou"
     fi
   fi
 done
