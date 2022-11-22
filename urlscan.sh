@@ -17,6 +17,7 @@ if [ "$rescode" == "1" ]; then
   curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
   ## Result
   if [ "$positives" -le "3" ]; then
+<<<<<<< HEAD
     curl --Silent "$fetch/sendMessage?chat_id=${TARGETGROUP}&text=The URL is safe.☑️" --Output "${WORKINGDIR}/temp/bot.log"
     msg_id=$(jq '.result.message_id' "${WORKINGDIR}/temp/bot.log")
     sleep 5
@@ -35,6 +36,26 @@ if [ "$rescode" == "1" ]; then
       msg_id=$(jq '.result.message_id' "${WORKINGDIR}/temp/bot.log")
       sleep 5
       curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
+=======
+    curl --Silent "$fetch/sendMessage?chat_id=$id&text=The URL is safe.☑️" --Output "temp/bot.log"
+    msg_id=$(jq '.result.message_id' "temp/bot.log")
+    sleep 3
+    curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+  else
+    if [ "$positives" -le "5" ]; then
+      curl --Silent "$fetch/forwardMessage?chat_id=$frdid&from_chat_id=$id&message_id=$urlmsgid"
+      curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$urlmsgid"
+      curl --Silent "$fetch/sendMessage?chat_id=$id&text=This Message needs additional Review.📝" --Output "temp/bot.log"
+      msg_id=$(jq '.result.message_id' "temp/bot.log")
+      sleep 3
+      curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+    else
+      curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$urlmsgid"
+      curl --Silent "$fetch/sendMessage?chat_id=$id&text=The URL is Dangerous.⚠️" --Output "temp/bot.log"
+      msg_id=$(jq '.result.message_id' "temp/bot.log")
+      sleep 3
+      curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+>>>>>>> parent of f86cca2... Updated Timings of Deleting Command Output
     fi
   fi
 else
@@ -55,12 +76,21 @@ else
     curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
   else
     if [ "$positives" -le "5" ]; then
+<<<<<<< HEAD
       curl --Silent "$fetch/forwardMessage?chat_id=${FORWARDID}&from_chat_id=${TARGETGROUP}&message_id=$urlmsgid"
       curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$urlmsgid"
       curl --Silent "$fetch/sendMessage?chat_id=${TARGETGROUP}&text=This Message needs additional Review.📝" --Output "${WORKINGDIR}/temp/bot.log"
       msg_id=$(jq '.result.message_id' "${WORKINGDIR}/temp/bot.log")
       sleep 10
       curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$msg_id"
+=======
+      curl --Silent "$fetch/forwardMessage?chat_id=$frdid&from_chat_id=$id&message_id=$urlmsgid"
+      curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$urlmsgid"
+      curl --Silent "$fetch/sendMessage?chat_id=$id&text=This Message needs additional Review.📝" --Output "temp/bot.log"
+      msg_id=$(jq '.result.message_id' "temp/bot.log")
+      sleep 5
+      curl --Silent "$fetch/deleteMessage?chat_id=$id&message_id=$msg_id"
+>>>>>>> parent of f86cca2... Updated Timings of Deleting Command Output
     else
       curl --Silent "$fetch/deleteMessage?chat_id=${TARGETGROUP}&message_id=$urlmsgid"
       curl --Silent "$fetch/sendMessage?chat_id=${TARGETGROUP}&text=The URL is Dangerous.⚠️" --Output "${WORKINGDIR}/temp/bot.log"
